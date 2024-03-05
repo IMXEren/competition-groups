@@ -73,9 +73,12 @@ if [ $? -eq 0 ]; then
 	exit 1
     fi
     echo "$package_script" > ${package}
+    mkdir -p lib-${package}
     for libpath in $(ldd ${package}.bin | grep -F "/data/data/com.termux/" | sed "s/.* //g"); do
         cp -L "$libpath" lib-${package} &>/dev/null
     done
+    ## Only removes when empty
+    rmdir lib-${package} 2>/dev/null
     echo -e "\n  Zipping package..."
     chmod 744 ${package} ${package}.bin &>/dev/null
     7z a -tzip -mx=9 -bd -bso0 ${zip_name} ${package} ${package}.bin lib-${package}

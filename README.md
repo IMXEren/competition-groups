@@ -12,6 +12,13 @@ Follow the setup below to use in Termux and Termux: Tasker -
 4. Open Termux and run these commands: (with description)
 
    ```bash
+
+   ## You may also simply run this equivalent script instead:
+
+   curl -s https://raw.githubusercontent.com/IMXEren/competition-groups/master/setup.sh | bash
+
+   ###########################################################################################
+
    termux-setup-storage                          ## Allowing access to /storage/emulated/0 (or /sdcard)
    yes | pkg up -y                               ## Upgrade existing packages
    yes | pkg install -y tur-repo x11-repo        ## Adding additional repos to extend package list
@@ -29,10 +36,13 @@ Follow the setup below to use in Termux and Termux: Tasker -
    WCA_PASS="pass" \  ## password
    ./compgroups
 
+
    ## Output
-   Login Successful
-   Time elapsed: 43.679098574s
-   Done...
+
+   # Login Successful
+   # Time elapsed: 43.679098574s
+   # Done...
+
    ## Anything other than them concludes to the error.
    ## On success, it should create a competitions.json which has the scraped data.
    ```

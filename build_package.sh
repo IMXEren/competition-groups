@@ -2,7 +2,8 @@
 
 if [ -n $TERMUX_VERSION ]; then
     apt update
-    yes | pkg install -y git rust termux-elf-cleaner p7zip 2>/dev/null | grep -E '(Need to get |Get:|Unpacking |Setting up )'
+    yes | pkg install -y git rust termux-elf-cleaner 2>/dev/null | grep -E '(Need to get |Get:|Unpacking |Setting up )'
+    yes | pkg install -y p7zip ldd file tur-repo root-repo x11-repo 2>/dev/null | grep -E '(Need to get |Get:|Unpacking |Setting up )'
 else
     echo "The script should run on Termux"
     exit 1

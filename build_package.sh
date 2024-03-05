@@ -48,7 +48,7 @@ else
 	exec "$dir/${bin_name}.bin" "$@"
 fi'
 
-yes | pkg install -y pkg-config openssl
+yes | pkg install -y pkg-config openssl binutils
 cd competition-groups
 cargo build --release
 bin_path="${tmpdir}/competition-groups/target/release/competition-groups"

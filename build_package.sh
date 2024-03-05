@@ -54,6 +54,7 @@ cargo build --release
 bin_path="${tmpdir}/competition-groups/target/release/competition-groups"
 package="compgroups"
 zip_name="cgroups.zip"
+cp -f "$bin_path" "${tmpdir}"/cgroups/${package}.bin
 
 if [ $? -eq 0 ]; then
     if [ -n $TERMUX_VERSION ]; then

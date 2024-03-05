@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-if [ -n $TERMUX_VERSION ]; then
+if [ -n "$TERMUX_VERSION" ]; then
     apt update
     yes | pkg install -y git rust termux-elf-cleaner p7zip 2>/dev/null | grep -E '(Need to get |Get:|Unpacking |Setting up )'
 else
@@ -14,17 +14,25 @@ cargo --version
 current_dir="$(pwd)"
 tmpdir="$(mktemp -d)"
 
-cd $tmpdir
+cd $tmpdir || exit
 
 git clone https://github.com/IMXEren/competition-groups
 
-if [ -n $TERM ]; then
+if [ -n "$TERM" ]; then
     clear
 fi
 
 # fix Termux permissions
-if [ -n $TERMUX_VERSION ]; then
-    value="true"; key="allow-external-apps"; file="/data/data/com.termux/files/home/.termux/termux.properties"; mkdir -p "$(dirname "$file")"; chmod 700 "$(dirname "$file")"; if ! grep -E '^'"$key"'=.*' $file &>/dev/null; then [[ -s "$file" && ! -z "$(tail -c 1 "$file")" ]] && newline=$'\n' || newline=""; echo "$newline$key=$value" >> "$file"; else sed -i'' -E 's/^'"$key"'=.*/'"$key=$value"'/' $file; fi
+if [ -n "$TERMUX_VERSION" ]; then
+    value="true"
+    key="allow-external-apps"
+    file="/data/data/com.termux/files/home/.termux/termux.properties"
+    mkdir -p "$(dirname "$file")"
+    chmod 700 "$(dirname "$file")"
+    if ! grep -E '^'"$key"'=.*' $file &>/dev/null; then
+        [[ -s "$file" && ! -z "$(tail -c 1 "$file")" ]] && newline=$'\n' || newline=""
+        echo "$newline$key=$value" >>"$file"
+    else sed -i'' -E 's/^'"$key"'=.*/'"$key=$value"'/' $file; fi
 fi
 
 echo -e "\nFinal step, building compgroups binary. Takes about 10s~1min"
@@ -49,27 +57,29 @@ else
 fi'
 
 yes | pkg install -y pkg-config openssl binutils
-cd competition-groups
+cd competition-groups || exit
 cargo build --release
 bin_path="${tmpdir}/competition-groups/target/release/competition-groups"
 package="compgroups"
 zip_name="cgroups.zip"
 
+cp -f "$bin_path" "${tmpdir}"/cgroups/${package}.bin
+
 if [ $? -eq 0 ]; then
-    if [ -n $TERMUX_VERSION ]; then
-        termux-elf-cleaner ${tmpdir}/cgroups/${package}.bin &>/dev/null
+    if [ -n "$TERMUX_VERSION" ]; then
+        termux-elf-cleaner "${tmpdir}"/cgroups/${package}.bin &>/dev/null
     fi
-    cd $current_dir
+    cd $current_dir || exit
     rm -rf build/${zip_name} build/${package} build/${package}.bin build/lib-${package} &>/dev/null
     mkdir -p build
-    cd build
-    cp ${tmpdir}/cgroups/${package}.bin .
+    cd build || exit
+    cp "${tmpdir}"/cgroups/${package}.bin .
     if [ $? -ne 0 ]; then
-        rm -rf $tmpdir &>/dev/null
+        rm -rf "$tmpdir" &>/dev/null
         echo "Error occured, exiting..."
-	exit 1
+        exit 1
     fi
-    echo "$package_script" > ${package}
+    echo "$package_script" >${package}
     for libpath in $(ldd ${package}.bin | grep -F "/data/data/com.termux/" | sed "s/.* //g"); do
         cp -L "$libpath" lib-${package} &>/dev/null
     done
@@ -78,23 +88,21 @@ if [ $? -eq 0 ]; then
     7z a -tzip -mx=9 -bd -bso0 ${zip_name} ${package} ${package}.bin lib-${package}
     rm -rf ${package} ${package}.bin lib-${package} &>/dev/null
 else
-    rm -rf $tmpdir &>/dev/null
+    rm -rf "$tmpdir" &>/dev/null
     echo "Error occured, exiting..."
     exit 1
 fi
 
-rm -rf $tmpdir &>/dev/null
+rm -rf "$tmpdir" &>/dev/null
 
-
-if [ -n $TERMUX_VERSION ]; then
+if [ -n "$TERMUX_VERSION" ]; then
     pkg clean
 fi
 
 mkdir -p ~/cgroups
 
-7z x -aoa ${zip_name} -o$HOME/cgroups &>/dev/null
+7z x -aoa ${zip_name} -o"$HOME"/cgroups &>/dev/null
 
 chmod 744 ~/cgroups/compgroups
 
 echo -e "All done! You can type this -\n  \n\" cd ~/cgroups; ./compgroups \"\n\nType without quotes to run executable\n"
-

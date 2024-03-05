@@ -4,11 +4,10 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: build-comp-groups
+  group: build-compgroups
 
 jobs:
   build_exec:
-    needs: get_commit_hash
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -38,7 +37,7 @@ jobs:
             echo "arch_name=${{ matrix.platform }}" >> $GITHUB_ENV
           fi
 
-      - name: Build Competition Groups
+      - name: Build Competition Groups Binary
         run: |
           mkdir -p build
 

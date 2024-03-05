@@ -47,6 +47,8 @@ Follow the setup below to use in Termux and Termux: Tasker -
    ## On success, it should create a competitions.json which has the scraped data.
    ```
 
+5. Import the task **[`[WCA] Competition Groups`](https://taskernet.com/shares/?user=AS35m8k0QSchKA1x02SixFIhiL41a828J1qapOYfcEuyL2zSn%2FfJTN5WVSi01o18x6EAFb4%3D&id=Task%3A%5BWCA%5D+Competition+Groups)** from taskernet.
+
 ## Credits
 
 **[HunterXProgrammer@MdTestV5](https://github.com/HunterXProgrammer/Tasker-MdtestV5)**

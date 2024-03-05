@@ -54,7 +54,8 @@ cargo build --release
 bin_path="${tmpdir}/competition-groups/target/release/competition-groups"
 package="compgroups"
 zip_name="cgroups.zip"
-cp -f "$bin_path" "${tmpdir}"/cgroups/${package}.bin
+
+cp -f "$bin_path" "${tmpdir}"/competition-groups/${package}.bin
 
 if [ $? -eq 0 ]; then
     if [ -n $TERMUX_VERSION ]; then
@@ -64,7 +65,7 @@ if [ $? -eq 0 ]; then
     rm -rf build/${zip_name} build/${package} build/${package}.bin build/lib-${package} &>/dev/null
     mkdir -p build
     cd build
-    cp ${tmpdir}/cgroups/${package}.bin .
+    cp ${tmpdir}/competition-groups/${package}.bin .
     if [ $? -ne 0 ]; then
         rm -rf $tmpdir &>/dev/null
         echo "Error occured, exiting..."
